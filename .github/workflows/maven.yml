@@ -33,4 +33,11 @@ jobs:
           # Write the SSH key to a file
           echo "$EC2_SSH_KEY" > private_key.pem
           chmod 600 private_key.pem
+               # Copy the WAR file from backend/target/ to the EC2 instance
+          scp -i private_key.pem -o StrictHostKeyChecking=no /home/ubuntu//QuaLIS-Runner/actions-runner/QuaLIS-Java-Work/QuaLIS/QuaLIS/QuaLIS/target/QuaLIS.war $EC2_USERNAME@$EC2_HOST:/opt/tomcat/apache-tomcat-10.1.41/webapps
 
+          # Optionally restart Tomcat
+          ssh -i private_key.pem -o StrictHostKeyChecking=no $EC2_USERNAME@$EC2_HOST "sudo systemctl restart tomcat.service"
+
+          # Clean up
+          rm private_key.pem
