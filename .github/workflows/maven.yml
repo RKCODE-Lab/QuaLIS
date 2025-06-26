@@ -24,4 +24,13 @@ jobs:
     - name: Build with Maven
       working-directory : QuaLIS
       run: mvn -B package --file pom.xml
+    - name: Deploy to EC2
+      env:
+          EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+          EC2_USERNAME: ${{ secrets.EC2_USERNAME }}
+      run: |
+          # Write the SSH key to a file
+          echo "$EC2_SSH_KEY" > private_key.pem
+          chmod 600 private_key.pem
 
